@@ -5,9 +5,13 @@
  */
 package edu.pitt.infsci2560.rss.servlets;
 
+import com.sun.syndication.feed.synd.SyndFeed;
+import com.sun.syndication.io.FeedException;
+import com.sun.syndication.io.SyndFeedInput;
+import com.sun.syndication.io.XmlReader;
 import java.io.IOException;
 import java.net.URL;
-
+import java.util.logging.Level;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -15,14 +19,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.log4j.Logger;
-
-import com.sun.syndication.feed.synd.SyndFeed;
-import com.sun.syndication.io.FeedException;
-import com.sun.syndication.io.SyndFeedInput;
-import com.sun.syndication.io.XmlReader;
-import java.util.logging.Level;
 
 /**
  *
@@ -56,8 +53,10 @@ public class RssServlet extends HttpServlet {
         SyndFeed syndFeed = null;
         XmlReader xmlReader = new XmlReader(url);
         syndFeed = syndFeedInput.build(xmlReader);
+  
         logger.debug("Forwarding to home.jsp");
-        request.setAttribute("syndFeed", syndFeed);
+        request.setAttribute("title", syndFeed.getTitle());
+        request.setAttribute("entries", syndFeed.getEntries());
         homeJsp.forward(request, response);
     }
 
